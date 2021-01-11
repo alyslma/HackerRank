@@ -1,2 +1,2 @@
 # HackerRank
-HackerRank challenge submissions
+HackerRank challenge submissions divided by language
