@@ -181,6 +181,66 @@ HAVING sum(score) > 0
 ORDER BY sum(score) DESC, h.hacker_id;
 
 
+------------+------------
+--      CHALLENGES     --
+------------+------------
+-- https://www.hackerrank.com/challenges/challenges --
+
+/* The tables HACKERS and CHALLENGES are described as follows:
+
+The hacker_id is the id of the hacker, and name is the name of the hacker.
++-------------+-------------+
+|          HACKERS          |
++-------------+-------------+
+|  Column     |    Type     |
++-------------+-------------+
+| hacker_id   | Integer     |
+| name        | String      |
++-------------+-------------+
+
+The challenge_id is the id of the challenge, and hacker_id is the id of the student who created the challenge.
++-------------------+------------------+
+|               CHALLENGES             |
++-------------------+------------------+
+|       Column      |       Type       |
++-------------------+------------------+
+|  challenge_id     |      Integer     |
+|  hacker_id        |      Integer     |
++-------------------+------------------+
+
+Julia asked her students to create some coding challenges. 
+Write a query to print the hacker_id, name, and the total number of challenges created by each student. 
+Sort your results by the total number of challenges in descending order. 
+If more than one student created the same number of challenges, then sort the result by hacker_id. 
+If more than one student created the same number of challenges and the count is less than the maximum number of challenges created, then exclude those students from the result.
+*/
+
+-- (1) Join the two tables and group by hacker_id and name to get total number of challenges created by each student.
+-- (2) Exclude students with the same number of challenges that aren't the max number of challenges made in total.
+-- So challenge_created count is the maximum number or only appears once among all students.
+
+SELECT h.hacker_id, h.name, COUNT(c.hacker_id) AS challenge_cnt
+FROM hackers h 
+JOIN challenges c 
+ON h.hacker_id = c.hacker_id
+GROUP BY h.hacker_id, h.name
+HAVING challenge_cnt = -- where challenge_cnt is the max number of challenges created
+        (SELECT MAX(t1.hacker_cnt)
+        FROM (
+            SELECT COUNT(hacker_id) AS hacker_cnt
+            FROM challenges
+            GROUP BY hacker_id
+            ORDER BY hacker_id) t1)
+    OR challenge_cnt IN  -- or challenge_cnt only appears once
+        (SELECT t2.hacker_cnt
+        FROM (
+            SELECT COUNT(*) AS hacker_cnt 
+            FROM challenges
+            GROUP BY hacker_id) t2
+        GROUP BY t2.hacker_cnt
+        HAVING COUNT(t2.hacker_cnt) = 1)
+ORDER BY challenge_cnt DESC, c.hacker_id;
+
 
 
 ----------------+---------------
