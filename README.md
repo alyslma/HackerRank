@@ -1,6 +1,6 @@
 # HackerRank Submissions
 HackerRank challenge submissions divided by category:
-- Algorithms: Warmup
+- Algorithms: WarmUp
 - InterviewPreparationKit: WarmUpChallenges
 - Python (Python 3)
 - SQL (MySQL, unless stated otherwise)
